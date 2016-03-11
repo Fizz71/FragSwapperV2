@@ -1,0 +1,10 @@
+Open Command Window (CMD)
+
+Change director to site's directory:
+CD C:\Users\kmf\Documents\FragSwapper\FragSwapperV2\src\FragSwapperV2
+
+Add migration (Change the name!)
+dnx ef migrations add [name]
+
+Apply the changes
+dnx ef database update

@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - FragSwapperV2</title>
+
+    @section scripts{
+        @*/* load your scripts here. You can exclude jQuery,
+            coz it's already in the template */ *@
+    }
+
+    <environment names="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+</head>
+<body data-ng-app="application" data-ng-controller="userNotificationsController">
+    <div id="fsHeaderMobile" class="navbar navbar-inverse navbar-fixed-top visible-xs-inline-block">
+        <div class="container">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+    </div>
+    <div id="fsHeader" class="navbar navbar-inverse navbar-fixed-top hidden-xs" >
+        <div class="container-fluid">
+            <table style="width:100%">
+                <tr>
+                    <td>
+                        <a asp-controller="Home" asp-action="Index">
+                            <img alt="Brand" src="~/images/fs_logo.gif" class="img-circle" style="height:60px;width:60px;padding: 5px 10px 5px 0;" />
+                        </a>
+                    </td>
+                    <td style="width:100%;">
+                        <div class="container-fluid" style="padding-right:0;padding-bottom: 6px;">
+                            @await Html.PartialAsync("_UserInfoPartial")
+                        </div>
+                        <div class="container-fluid">
+                            <ul class="nav nav-pills nav-justified">
+                                <li role="menuitem" class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                        Events <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a asp-controller="Home" asp-action="Sponsors">Current Events</a></li>
+                                        <li><a asp-controller="Home" asp-action="Sponsors">Event Archives</a></li>
+                                        <li><a asp-controller="Home" asp-action="Sponsors">Host/Add an Event</a></li>
+                                    </ul>
+                                </li>
+                                <li role="menuitem" class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                        Hosts <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a asp-controller="Home" asp-action="Sponsors">Active Hosts</a></li>
+                                        <li><a asp-controller="Home" asp-action="Sponsors">Host Archives</a></li>
+                                        <li><a asp-controller="Home" asp-action="Sponsors">Add an Host</a></li>
+                                    </ul>
+                                </li>
+                                <li role="menuitem" class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                        Sponsors <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a asp-controller="Home" asp-action="Sponsors">Current Sponsors</a></li>
+                                        <li><a asp-controller="Home" asp-action="Sponsor">Become a Sponsor</a></li>
+                                    </ul>
+                                </li>
+                                <li role="menuitem" class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                        Info <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a asp-controller="Home" asp-action="About">About</a></li>
+                                        <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
+                                        <li><a asp-controller="Home" asp-action="About">Privacy Policy</a></li>
+                                        <li><a asp-controller="Home" asp-action="About">FAQ</a></li>
+                                        <li><a asp-controller="Home" asp-action="About">Gold/Premium Membership</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td>
+                        @await Html.PartialAsync("_SponsorPartial")
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="container body-content" style="padding-top:20px;">
+        @RenderBody()
+        <hr />
+
+        <input type="text" ng-model="testValue">
+
+        <input type="button" data-ng-disabled="tableBlocked == true"
+               data-ng-click="boom()"
+               value="Boom" />
+        Boom: '{{boomMessage}}'
+        <hr />
+        <footer>
+            <div class="visible-xs-inline-block">
+                @await Html.PartialAsync("_SponsorPartial")
+            </div>
+            <p>&copy; 2016 - FragSwapperV2</p>
+        </footer>
+    </div>
+
+    <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/lib/signalr/jquery.signalR.min.js"></script>
+        <script src="~/signalr/hubs"></script>
+        <script src="~/lib/angular/angular.js"></script>
+
+        @* The following scripts should compile to ~/js/site.min.js  *@
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/js/application/application.js"></script>
+        <script src="~/js/application/controllers/userNotificationsController.js"></script>
+        <script src="~/js/application/services/notificationsService.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="~/lib/signalr/jquery.signalR.min.js"></script>
+        <script src="~/signalr/hubs"></script>
+        <script src="~/lib/angular/angular.js"></script>
+
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>
