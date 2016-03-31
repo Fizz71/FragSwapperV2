@@ -23,7 +23,7 @@ textarea {
   other selectors that are more specific or come later and might alter display.  
  */
 [ng\:cloak], [ng-cloak], .ng-cloak {
-  display: none !important;
+    display: none !important;
 }
 
 /* Carousel */
@@ -46,7 +46,7 @@ textarea {
 /* Ad image size based on shifting screen. */
 @media(max-width:767px) {
     .adImage {
-         width: 355px;
+        width: 355px;
     }
 }
 
@@ -62,7 +62,7 @@ textarea {
     }
 }
 
-@media(min-width:1200px) { 
+@media(min-width:1200px) {
     .adImage {
         width: 472px;
     }
@@ -77,4 +77,31 @@ textarea {
     padding: 8px 10px 0 0;
     height: 35px;
 }
+
+
+.multi-button {
+    width: 300px;
+    margin: 5px;
+}
+
+/* Below are the maps play css*/
+#map {
+    height: 420px;
+    width: 600px;
+}
+
+.infoWindowContent {
+    font-size: 14px !important;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+}
+
+h2 {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+/* End maps play css*/
+
+
+
 

@@ -9,7 +9,7 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.Logging;
-using FragSwapperV2.Models;
+using FragSwapperV2.Models.Db;
 using FragSwapperV2.Services;
 using FragSwapperV2.ViewModels.Account;
 using FragSwapperV2.Libraries;
@@ -149,6 +149,12 @@ namespace FragSwapperV2.Controllers
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation(4, "User logged out.");
+
+            // We need to clear out the session when a user logs off so that
+            // when the next person logs in (or the same user) all the settings
+            // start over.  This is especiall important for the UserDefaultRewriteMiddleware.
+            HttpContext.Session.Clear();
+
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 

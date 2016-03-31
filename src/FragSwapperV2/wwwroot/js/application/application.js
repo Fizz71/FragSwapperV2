@@ -9,3 +9,7 @@ $(function () {
 });
 
 angular.module('application').value('userNotificationsHub', userNotificationsHub);
+
+$(function () {
+    $('[data-toggle="popover"]').popover()
+})

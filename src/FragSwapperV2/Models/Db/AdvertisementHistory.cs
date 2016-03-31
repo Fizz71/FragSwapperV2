@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FragSwapperV2.Models
+namespace FragSwapperV2.Models.Db
 {
     public class AdvertisementHistory
     {

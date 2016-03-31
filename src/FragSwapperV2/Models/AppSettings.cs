@@ -7,7 +7,8 @@ namespace FragSwapperV2.Models
 {
     public class AppSettings
     {
-        public string GoogleAPIKey { get; set; }
+        public string GoogleServerAPIKey { get; set; }
+        public string GoogleBrowserAPIKey { get; set; }
         public string GoogleMapApiUrl { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace FragSwapperV2.Models
+namespace FragSwapperV2.Models.Db
 {
     /// <summary>
     /// This object is being maintained to hold all the old profiles so they

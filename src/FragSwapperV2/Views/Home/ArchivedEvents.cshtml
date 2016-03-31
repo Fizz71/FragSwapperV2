@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Archived Events";
+}
+<h2>@ViewData["Title"].</h2>
+<h3>@ViewData["Message"]</h3>
+Map:
+<div ng-controller="archivedEventsController">
+    <form class="form-horizontal">
+        Event Name:
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Event Name Contains..." ng-model="eventName">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button" ng-click="updateMap()">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                </button>
+            </span>
+        </div>
+        Year:
+        <select ng-model="eventYear"
+                ng-options="option as option for option in yearList"
+                ng-change="updateMap()"></select>
+    </form>
+    <div id="map"></div>
+    <div id="class" ng-repeat="marker in markers | orderBy : 'title'">
+        <a href="#" ng-click="openInfoWindow($event, marker)">{{marker.title}}</a>
+    </div>
+</div>

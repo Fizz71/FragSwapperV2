@@ -10,8 +10,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using FragSwapperV2.Models;
+using FragSwapperV2.Models.Db;
 using FragSwapperV2.Services;
-using FragSwapperV2.Extensions;
+using FragSwapperV2.Core;
+
 namespace FragSwapperV2
 {
     public class Startup
@@ -31,6 +33,11 @@ namespace FragSwapperV2
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            // In addition to being stored in the app settings, these variables need to be
+            // globally accessible so that the _Layout.cshtml can get to them.
+            FragSwapperV2.Libraries.Common.GoogleBrowserAPIKey = Configuration["AppSettings:GoogleBrowserAPIKey"];
+            FragSwapperV2.Libraries.Common.GoogleMapApiUrl = Configuration["AppSettings:GoogleMapApiUrl"];
         }
 
         public IConfigurationRoot Configuration { get; set; }
@@ -46,6 +53,11 @@ namespace FragSwapperV2
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
             services.AddMvc();
+            services.AddCaching();
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(120);
+                options.CookieName = ".FragSwapperV2";
+            });
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
@@ -85,6 +97,9 @@ namespace FragSwapperV2
             app.UseSignalR2();
             app.UseIdentity();
             // To configure external authentication please see http://go.microsoft.com/fwlink/?LinkID=532715
+            app.UseSession();
+            app.UseMiddleware<UserDefaultRewriteMiddleware>();
+            app.UseMiddleware<SpecialUrlRewritingMiddleware>();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

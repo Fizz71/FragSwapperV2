@@ -1,7 +1,7 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 
-namespace FragSwapperV2.Models
+namespace FragSwapperV2.Models.Db
 {
     public class EventAdministrator
     {

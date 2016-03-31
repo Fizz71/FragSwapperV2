@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.OptionsModel;
 using FragSwapperV2.Models;
@@ -18,6 +19,7 @@ namespace FragSwapperV2.Controllers
         {
             appSettings = o.Value;
         }
+
         public IActionResult Index()
         {
             return View();
@@ -25,7 +27,7 @@ namespace FragSwapperV2.Controllers
 
         public IActionResult About()
         {
-            var google = new GoogleGeocoding(appSettings.GoogleAPIKey, appSettings.GoogleMapApiUrl);
+            var google = new GoogleGeocoding(appSettings.GoogleServerAPIKey, appSettings.GoogleMapApiUrl);
             var gc = google.GetGeocoding("615 Wellington Ave., 19609");
             ViewData["Message"] = gc.results[0].formatted_address;
 
@@ -43,5 +45,20 @@ namespace FragSwapperV2.Controllers
         {
             return View();
         }
+
+        public IActionResult CurrentEvents()
+        {
+            ViewData["Message"] = "Current Events";
+
+            return View();
+        }
+
+        public IActionResult ArchivedEvents()
+        {
+            ViewData["Message"] = "Events Archive";
+
+            return View();
+        }
+
     }
 }

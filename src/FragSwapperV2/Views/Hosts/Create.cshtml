@@ -1,0 +1,67 @@
+﻿@using System.Collections.Generic
+@using Microsoft.AspNet.Http
+@using Microsoft.AspNet.Http.Authentication
+@using FragSwapperV2.Models.Db
+@model CreateHostViewModel
+
+<div ng-controller="hostsController">
+    <form ng-cloak asp-controller="Host" asp-action="Create" method="post" class="form-horizontal" role="form">
+        <h3>Registering a New Host with FragsSwapper.com</h3>
+        <p>Vulputate volutpat macto ea capto saepius vel velit fere suscipit eros capto. Nulla exputo gilvus euismod persto refero zelus voco consequat epulae.</p>
+        <hr />
+        <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="RequestPremium"></label>
+            <a tabindex="0" aria-hidden="true" class="glyphicon glyphicon-info-sign" role="button" data-toggle="popover" data-trigger="focus" title="Account Type" data-content="For information about Account Types see the Premium Hosting page available on the Info menu."></a>
+            <br />
+            <button type="button" class="btn multi-button" ng-click="wantsPremium=false" ng-class="{'btn-primary-outline': wantsPremium, 'btn-primary': !wantsPremium}">Standard Host Account (Free)<br /><small>Requires Site Administrative Approval</small></button>
+            <button type="button" class="btn multi-button" ng-click="wantsPremium=true" ng-class="{'btn-primary': wantsPremium, 'btn-primary-outline': !wantsPremium}">Premium Host Account (Paid)<br /><small>Automatically Approved After Purchase</small></button>
+            <input asp-for="RequestPremium" type="hidden" value="{{wantsPremium}}" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <a tabindex="0" aria-hidden="true" class="glyphicon glyphicon-info-sign" role="button" data-toggle="popover" data-trigger="focus" title="Host Name" data-content="A host can be just about anything: a business, a 401c3 (or non 401c3) organization or just a bunch of friends that get together to sell/trade corals.  Just keep in mind that this is a public site so if you're making up a name, please keep in clean!"></a>
+            <br />
+            <input asp-for="Name" type="text" class="form-control" ng-model="hostName" ng-change="updateAbr()" placeholder="Enter a Host Name" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <div class="checkbox">
+                <label>
+                    <input asp-for="HostPermission" type="checkbox"> <small><i>I certify that I have permission to represent the entity entered as the Host Name.  I understand that if it is determined that I did not have permission from the entity the account will be deleted and any fees paid to FragSwapper.com will NOT be refunded.  This includes (but is not limited to) names of existing businesses, organization and registered trademarks.</i></small>
+                </label>
+                <span asp-validation-for="HostPermission" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Abbreviation"></label>
+            <a tabindex="0" aria-hidden="true" class="glyphicon glyphicon-info-sign" role="button" data-toggle="popover" data-trigger="focus"
+               title="Abbreviation"
+               data-content="Really?  This is a just plain old ordinary abbreviation for your host name!"></a>
+            <br />
+            <input asp-for="Abbreviation" type="text" class="form-control" style="text-transform: uppercase;" ng-model="hostAbr" placeholder="Enter an Abbreviation" />
+            <span asp-validation-for="Abbreviation" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ShortName"></label>
+            <a tabindex="0" aria-hidden="true" class="glyphicon glyphicon-info-sign" role="button" data-toggle="popover" data-trigger="focus"
+               title="Host Short Name"
+               data-content="This site requires a unique short name to represent your host.  Normally your abbreviation will do, but since it is possible for more than one host to wind up with the same abbreviation we have a separate ‘Short Name’ field to hold that unique value."></a>
+            <br />
+            <input asp-for="ShortName" type="text" class="form-control" style="text-transform: lowercase;" id="hostShortName" ng-model="hostShortName" placeholder="Enter a Short Name">
+            <span asp-validation-for="ShortName" class="text-danger"></span><br />
+            <label>
+                Short Cut URL:
+                <a tabindex="0" aria-hidden="true" class="glyphicon glyphicon-info-sign" role="button" data-toggle="popover" data-trigger="focus"
+                   title="Host Shortcut URL"
+                   data-content="Your Short Name appened to 'http://FragSwaper.com/' will allow users to access FragSwapper.com and immediately jump to your content.  If you have an event in progress they will be automatically be taken to it--if you don’t have an active event it will take them to your FragSwapper host home page where they will see your logo, information and past events."></a>
+            </label> http://www.fragswapper.com/{{ hostShortName }}
+        </div>
+        <button type="submit" class="btn btn-default">Register Host</button>
+    </form>
+</div>
+
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

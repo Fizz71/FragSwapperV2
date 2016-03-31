@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 
 
-namespace FragSwapperV2.Models
+namespace FragSwapperV2.Models.Db
 {
     public class Advertisement
     {

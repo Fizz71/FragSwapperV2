@@ -8,6 +8,10 @@ namespace FragSwapperV2.Libraries
 {
     public class Common
     {
+        // These are global variables used by _Layout
+        public static string GoogleBrowserAPIKey { get; set; }
+        public static string GoogleMapApiUrl { get; set; }
+
         public static bool IsValidEmail(string email)
         {
             try
@@ -22,4 +26,5 @@ namespace FragSwapperV2.Libraries
         }
 
     }
+
 }

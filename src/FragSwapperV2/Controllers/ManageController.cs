@@ -7,7 +7,7 @@ using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Logging;
-using FragSwapperV2.Models;
+using FragSwapperV2.Models.Db;
 using FragSwapperV2.Services;
 using FragSwapperV2.ViewModels.Manage;
 

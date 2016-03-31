@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FragSwapperV2.Models
+namespace FragSwapperV2.Models.Db
 {
     public class Region
     {

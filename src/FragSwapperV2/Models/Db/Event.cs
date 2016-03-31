@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace FragSwapperV2.Models
+namespace FragSwapperV2.Models.Db
 {
     public enum EventAccountType
     {
@@ -9,6 +10,8 @@ namespace FragSwapperV2.Models
         Premium = 2
     }
 
+    // Notes: These status have matching map images by name!  Any additions or changes will
+    // require you to updage /images/map and the googleMapService (for bouncing).
     public enum EventStatus
     {
         Deleted = -1,
@@ -39,6 +42,8 @@ namespace FragSwapperV2.Models
         [Required]
         public DateTime EventDate { get; set; }
 
+        public bool Premium { get; set; }
+
 
         /// <summary>
         /// Used to track when a event is to change event status.
@@ -57,9 +62,9 @@ namespace FragSwapperV2.Models
 
         public string LocationFormattedAddress { get; set; }
 
-        public string LocationLat { get; set; }
+        public double? LocationLat { get; set; }
 
-        public string LocationLng { get; set; }
+        public double? LocationLng { get; set; }
 
         public string LocationType { get; set; }
 
@@ -77,6 +82,9 @@ namespace FragSwapperV2.Models
 
         [Required]
         public bool ModuleSpecialRequestBoard { get; set; }
+
+        [Required]
+        public bool ModuleAdminQuestions { get; set; }
 
     }
 }

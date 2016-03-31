@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Current Events";
+}
+<h2>@ViewData["Title"].</h2>
+<h3>@ViewData["Message"]</h3>
+Map:
+
+
+    <div ng-controller="currentEventsController">
+        <div id="map"></div>
+        <div id="class" ng-repeat="marker in markers | orderBy : 'title'">
+            <a href="#" ng-click="openInfoWindow($event, marker)">{{marker.title}}</a>
+        </div>
+    </div>

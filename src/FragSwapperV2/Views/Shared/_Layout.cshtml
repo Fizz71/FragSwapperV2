@@ -9,17 +9,18 @@
         @*/* load your scripts here. You can exclude jQuery,
             coz it's already in the template */ *@
     }
-
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link href="~/lib/bootstrap-fileinput/css/fileinput.css" rel="stylesheet" />
         <link rel="stylesheet" href="~/css/site.css" />
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link href="~/lib/bootstrap-fileinput/css/fileinput.css" rel="stylesheet" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
 </head>
-<body data-ng-app="application" data-ng-controller="userNotificationsController">
+<body data-ng-app="application">
     <div id="fsHeaderMobile" class="navbar navbar-inverse navbar-fixed-top visible-xs-inline-block">
         <div class="container">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -50,8 +51,8 @@
                                         Events <span class="caret"></span>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a asp-controller="Home" asp-action="Sponsors">Current Events</a></li>
-                                        <li><a asp-controller="Home" asp-action="Sponsors">Event Archives</a></li>
+                                        <li><a asp-controller="Home" asp-action="CurrentEvents">Current Events</a></li>
+                                        <li><a asp-controller="Home" asp-action="ArchivedEvents">Event Archives</a></li>
                                         <li><a asp-controller="Home" asp-action="Sponsors">Host/Add an Event</a></li>
                                     </ul>
                                 </li>
@@ -60,9 +61,9 @@
                                         Hosts <span class="caret"></span>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a asp-controller="Home" asp-action="Sponsors">Active Hosts</a></li>
+                                        <li><a asp-controller="Hosts" asp-action="Index">Active Hosts</a></li>
                                         <li><a asp-controller="Home" asp-action="Sponsors">Host Archives</a></li>
-                                        <li><a asp-controller="Home" asp-action="Sponsors">Add an Host</a></li>
+                                        <li><a asp-controller="Hosts" asp-action="Create">Register a New Host</a></li>
                                     </ul>
                                 </li>
                                 <li role="menuitem" class="dropdown">
@@ -83,7 +84,9 @@
                                         <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
                                         <li><a asp-controller="Home" asp-action="About">Privacy Policy</a></li>
                                         <li><a asp-controller="Home" asp-action="About">FAQ</a></li>
-                                        <li><a asp-controller="Home" asp-action="About">Gold/Premium Membership</a></li>
+                                        <li><a asp-controller="Home" asp-action="About">Premium Membership</a></li>
+                                        <li><a asp-controller="Home" asp-action="About">Premium Hosting</a></li>
+                                        <li><a asp-controller="Home" asp-action="About">Premium Events</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -96,7 +99,8 @@
             </table>
         </div>
     </div>
-    <div class="container body-content" style="padding-top:20px;">
+
+    <div class="container body-content" style="padding-top:20px;" ng-controller="userNotificationsController">
         @RenderBody()
         <hr />
 
@@ -121,12 +125,19 @@
         <script src="~/lib/signalr/jquery.signalR.min.js"></script>
         <script src="~/signalr/hubs"></script>
         <script src="~/lib/angular/angular.js"></script>
+        <script src="~/lib/bootstrap-fileinput/js/plugins/canvas-to-blob.js"></script>
+        <script src="~/lib/bootstrap-fileinput/js/fileinput.js"></script>
+        <script src="@(FragSwapperV2.Libraries.Common.GoogleMapApiUrl)js?key=@(FragSwapperV2.Libraries.Common.GoogleBrowserAPIKey)"></script>
 
-        @* The following scripts should compile to ~/js/site.min.js  *@
+        @* The following scripts should compile to ~/js/site.min.js for staging/production *@
         <script src="~/js/site.js" asp-append-version="true"></script>
         <script src="~/js/application/application.js"></script>
-        <script src="~/js/application/controllers/userNotificationsController.js"></script>
         <script src="~/js/application/services/notificationsService.js"></script>
+        <script src="~/js/application/services/googleMapService.js"></script>
+        <script src="~/js/application/controllers/userNotificationsController.js"></script>
+        <script src="~/js/application/controllers/currentEventsController.js"></script>
+        <script src="~/js/application/controllers/archivedEventsController.js"></script>
+        <script src="~/js/application/controllers/hostsController.js"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -134,11 +145,12 @@
         <script src="~/lib/signalr/jquery.signalR.min.js"></script>
         <script src="~/signalr/hubs"></script>
         <script src="~/lib/angular/angular.js"></script>
+        <script src="@(FragSwapperV2.Libraries.Common.GoogleMapApiUrl)js?key=@(FragSwapperV2.Libraries.Common.GoogleBrowserAPIKey)"></script>
 
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
     @RenderSection("scripts", required: false)
-
+    
 </body>
 </html>

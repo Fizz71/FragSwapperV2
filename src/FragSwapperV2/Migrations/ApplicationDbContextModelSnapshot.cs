@@ -16,7 +16,7 @@ namespace FragSwapperV2.Migrations
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("FragSwapperV2.Models.Advertisement", b =>
+            modelBuilder.Entity("FragSwapperV2.Models.Db.Advertisement", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
@@ -42,7 +42,7 @@ namespace FragSwapperV2.Migrations
                     b.HasKey("ID");
                 });
 
-            modelBuilder.Entity("FragSwapperV2.Models.AdvertisementAdministrator", b =>
+            modelBuilder.Entity("FragSwapperV2.Models.Db.AdvertisementAdministrator", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
@@ -54,7 +54,7 @@ namespace FragSwapperV2.Migrations
                     b.HasKey("ID");
                 });
 
-            modelBuilder.Entity("FragSwapperV2.Models.AdvertisementHistory", b =>
+            modelBuilder.Entity("FragSwapperV2.Models.Db.AdvertisementHistory", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
@@ -75,7 +75,7 @@ namespace FragSwapperV2.Migrations
                         .IsUnique();
                 });
 
-            modelBuilder.Entity("FragSwapperV2.Models.ApplicationUser", b =>
+            modelBuilder.Entity("FragSwapperV2.Models.Db.ApplicationUser", b =>
                 {
                     b.Property<string>("Id");
 
@@ -114,6 +114,8 @@ namespace FragSwapperV2.Migrations
 
                     b.Property<int>("oldSwapperKey");
 
+                    b.Property<bool>("settingEnableDefaultRedirect");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -125,7 +127,7 @@ namespace FragSwapperV2.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
                 });
 
-            modelBuilder.Entity("FragSwapperV2.Models.Event", b =>
+            modelBuilder.Entity("FragSwapperV2.Models.Db.Event", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
@@ -143,11 +145,13 @@ namespace FragSwapperV2.Migrations
 
                     b.Property<string>("LocationFormattedAddress");
 
-                    b.Property<string>("LocationLat");
+                    b.Property<double?>("LocationLat");
 
-                    b.Property<string>("LocationLng");
+                    b.Property<double?>("LocationLng");
 
                     b.Property<string>("LocationType");
+
+                    b.Property<bool>("ModuleAdminQuestions");
 
                     b.Property<bool>("ModuleCarPool");
 
@@ -162,12 +166,19 @@ namespace FragSwapperV2.Migrations
 
                     b.Property<DateTime>("PostEventSDateTime");
 
+                    b.Property<bool>("Premium");
+
                     b.Property<int>("Status");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("Status");
+
+                    b.HasIndex("ID", "Status")
+                        .IsUnique();
                 });
 
-            modelBuilder.Entity("FragSwapperV2.Models.EventAdministrator", b =>
+            modelBuilder.Entity("FragSwapperV2.Models.Db.EventAdministrator", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
@@ -179,31 +190,60 @@ namespace FragSwapperV2.Migrations
                     b.HasKey("ID");
                 });
 
-            modelBuilder.Entity("FragSwapperV2.Models.Host", b =>
+            modelBuilder.Entity("FragSwapperV2.Models.Db.EventAttendance", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Abreviation")
+                    b.Property<string>("ApplicationUserId");
+
+                    b.Property<bool>("Attending");
+
+                    b.Property<int?>("EventID");
+
+                    b.HasKey("ID");
+                });
+
+            modelBuilder.Entity("FragSwapperV2.Models.Db.Host", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Abbreviation")
                         .IsRequired()
                         .HasAnnotation("MaxLength", 20);
 
-                    b.Property<DateTime?>("AccountExpiration");
-
                     b.Property<int>("AccountType");
+
+                    b.Property<int>("LogoImageType");
+
+                    b.Property<string>("Message");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasAnnotation("MaxLength", 200);
 
+                    b.Property<DateTime?>("PremiumAccountExpiration");
+
+                    b.Property<int>("PremiumEvents");
+
                     b.Property<string>("ShortName")
                         .IsRequired()
                         .HasAnnotation("MaxLength", 20);
 
+                    b.Property<string>("URL")
+                        .HasAnnotation("MaxLength", 200);
+
                     b.HasKey("ID");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("ShortName")
+                        .IsUnique();
                 });
 
-            modelBuilder.Entity("FragSwapperV2.Models.HostAdministrator", b =>
+            modelBuilder.Entity("FragSwapperV2.Models.Db.HostAdministrator", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
@@ -215,7 +255,19 @@ namespace FragSwapperV2.Migrations
                     b.HasKey("ID");
                 });
 
-            modelBuilder.Entity("FragSwapperV2.Models.Notification", b =>
+            modelBuilder.Entity("FragSwapperV2.Models.Db.HostStates", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("HostID");
+
+                    b.Property<int?>("StateID");
+
+                    b.HasKey("ID");
+                });
+
+            modelBuilder.Entity("FragSwapperV2.Models.Db.Notification", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
@@ -227,7 +279,7 @@ namespace FragSwapperV2.Migrations
                     b.HasKey("ID");
                 });
 
-            modelBuilder.Entity("FragSwapperV2.Models.Region", b =>
+            modelBuilder.Entity("FragSwapperV2.Models.Db.Region", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
@@ -237,7 +289,7 @@ namespace FragSwapperV2.Migrations
                     b.HasKey("ID");
                 });
 
-            modelBuilder.Entity("FragSwapperV2.Models.State", b =>
+            modelBuilder.Entity("FragSwapperV2.Models.Db.State", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
@@ -249,7 +301,7 @@ namespace FragSwapperV2.Migrations
                     b.HasKey("ID");
                 });
 
-            modelBuilder.Entity("FragSwapperV2.Models.v1Swapper", b =>
+            modelBuilder.Entity("FragSwapperV2.Models.Db.v1Swapper", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
@@ -399,63 +451,85 @@ namespace FragSwapperV2.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("FragSwapperV2.Models.Advertisement", b =>
+            modelBuilder.Entity("FragSwapperV2.Models.Db.Advertisement", b =>
                 {
-                    b.HasOne("FragSwapperV2.Models.Event")
+                    b.HasOne("FragSwapperV2.Models.Db.Event")
                         .WithMany()
                         .HasForeignKey("EventID");
                 });
 
-            modelBuilder.Entity("FragSwapperV2.Models.AdvertisementAdministrator", b =>
+            modelBuilder.Entity("FragSwapperV2.Models.Db.AdvertisementAdministrator", b =>
                 {
-                    b.HasOne("FragSwapperV2.Models.Advertisement")
+                    b.HasOne("FragSwapperV2.Models.Db.Advertisement")
                         .WithMany()
                         .HasForeignKey("AdvertisementID");
 
-                    b.HasOne("FragSwapperV2.Models.ApplicationUser")
+                    b.HasOne("FragSwapperV2.Models.Db.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId");
                 });
 
-            modelBuilder.Entity("FragSwapperV2.Models.AdvertisementHistory", b =>
+            modelBuilder.Entity("FragSwapperV2.Models.Db.AdvertisementHistory", b =>
                 {
-                    b.HasOne("FragSwapperV2.Models.Advertisement")
+                    b.HasOne("FragSwapperV2.Models.Db.Advertisement")
                         .WithMany()
                         .HasForeignKey("AdvertisementID");
                 });
 
-            modelBuilder.Entity("FragSwapperV2.Models.Event", b =>
+            modelBuilder.Entity("FragSwapperV2.Models.Db.Event", b =>
                 {
-                    b.HasOne("FragSwapperV2.Models.Host")
+                    b.HasOne("FragSwapperV2.Models.Db.Host")
                         .WithMany()
                         .HasForeignKey("HostID");
                 });
 
-            modelBuilder.Entity("FragSwapperV2.Models.EventAdministrator", b =>
+            modelBuilder.Entity("FragSwapperV2.Models.Db.EventAdministrator", b =>
                 {
-                    b.HasOne("FragSwapperV2.Models.ApplicationUser")
+                    b.HasOne("FragSwapperV2.Models.Db.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId");
 
-                    b.HasOne("FragSwapperV2.Models.Event")
+                    b.HasOne("FragSwapperV2.Models.Db.Event")
                         .WithMany()
                         .HasForeignKey("EventID");
                 });
 
-            modelBuilder.Entity("FragSwapperV2.Models.HostAdministrator", b =>
+            modelBuilder.Entity("FragSwapperV2.Models.Db.EventAttendance", b =>
                 {
-                    b.HasOne("FragSwapperV2.Models.ApplicationUser")
+                    b.HasOne("FragSwapperV2.Models.Db.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId");
 
-                    b.HasOne("FragSwapperV2.Models.Host")
+                    b.HasOne("FragSwapperV2.Models.Db.Event")
+                        .WithMany()
+                        .HasForeignKey("EventID");
+                });
+
+            modelBuilder.Entity("FragSwapperV2.Models.Db.HostAdministrator", b =>
+                {
+                    b.HasOne("FragSwapperV2.Models.Db.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("FragSwapperV2.Models.Db.Host")
                         .WithMany()
                         .HasForeignKey("HostID");
                 });
 
-            modelBuilder.Entity("FragSwapperV2.Models.State", b =>
+            modelBuilder.Entity("FragSwapperV2.Models.Db.HostStates", b =>
                 {
-                    b.HasOne("FragSwapperV2.Models.Region")
+                    b.HasOne("FragSwapperV2.Models.Db.Host")
+                        .WithMany()
+                        .HasForeignKey("HostID");
+
+                    b.HasOne("FragSwapperV2.Models.Db.State")
+                        .WithMany()
+                        .HasForeignKey("StateID");
+                });
+
+            modelBuilder.Entity("FragSwapperV2.Models.Db.State", b =>
+                {
+                    b.HasOne("FragSwapperV2.Models.Db.Region")
                         .WithMany()
                         .HasForeignKey("RegionID");
                 });
@@ -469,14 +543,14 @@ namespace FragSwapperV2.Migrations
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("FragSwapperV2.Models.ApplicationUser")
+                    b.HasOne("FragSwapperV2.Models.Db.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("FragSwapperV2.Models.ApplicationUser")
+                    b.HasOne("FragSwapperV2.Models.Db.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
@@ -487,7 +561,7 @@ namespace FragSwapperV2.Migrations
                         .WithMany()
                         .HasForeignKey("RoleId");
 
-                    b.HasOne("FragSwapperV2.Models.ApplicationUser")
+                    b.HasOne("FragSwapperV2.Models.Db.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
