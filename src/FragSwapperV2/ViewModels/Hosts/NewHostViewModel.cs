@@ -26,5 +26,8 @@ namespace FragSwapperV2.ViewModels.Hosts
         [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "Short Name can only be letters and numbers.")]
         [Remote("CreateValidation", "Hosts",ErrorMessage ="That Short Name is already in use.")]
         public string ShortName { get; set; }
+
+        [Required(ErrorMessage = "You must select atleast one State/Province."), Display(Name = "Event Locations")]
+        public List<string> States { get; set; }
     }
 }

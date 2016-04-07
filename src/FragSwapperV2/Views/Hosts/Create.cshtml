@@ -5,7 +5,7 @@
 @model CreateHostViewModel
 
 <div ng-controller="hostsController">
-    <form ng-cloak asp-controller="Host" asp-action="Create" method="post" class="form-horizontal" role="form">
+    <form ng-cloak asp-controller="Host" asp-action="Create" id="newHostForm" method="post" class="form-horizontal" role="form">
         <h3>Registering a New Host with FragsSwapper.com</h3>
         <p>Vulputate volutpat macto ea capto saepius vel velit fere suscipit eros capto. Nulla exputo gilvus euismod persto refero zelus voco consequat epulae.</p>
         <hr />
@@ -56,6 +56,16 @@
                    title="Host Shortcut URL"
                    data-content="Your Short Name appened to 'http://FragSwaper.com/' will allow users to access FragSwapper.com and immediately jump to your content.  If you have an event in progress they will be automatically be taken to it--if you don’t have an active event it will take them to your FragSwapper host home page where they will see your logo, information and past events."></a>
             </label> http://www.fragswapper.com/{{ hostShortName }}
+        </div>
+        <div class="form-group">
+            <label asp-for="States"></label>
+            <a tabindex="0" aria-hidden="true" class="glyphicon glyphicon-info-sign" role="button" data-toggle="popover" data-trigger="focus"
+               title="Event Attendee Location(s)"
+               data-content="Please select the locations that people would normally travel from to attend your events.  If your events are small, pick only the state you reside in—if your events are large you should pick some of your neighboring states as well."></a>
+            <br />
+            <select class="form-control" ng-options="o.Name for o in regions" ng-model="selectedRegion" ng-change="updateStates()"></select>
+            <select asp-for="States" class="form-control" multiple="multiple" size="10" ng-options="o.ID as o.Name for o in states" ng-model="selectedStates"></select>
+            <span asp-validation-for="States" class="text-danger"></span><br />
         </div>
         <button type="submit" class="btn btn-default">Register Host</button>
     </form>

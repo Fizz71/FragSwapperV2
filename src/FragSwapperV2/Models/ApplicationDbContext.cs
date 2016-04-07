@@ -22,15 +22,17 @@ namespace FragSwapperV2.Models
         public DbSet<Region> Regions { get; set; }
         public DbSet<State> States { get; set; }
         public DbSet<EventAttendance> EventAttendance { get; set; }
-
-        
-
-
+        public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<Image> Images { get; set; }
         public DbSet<v1Swapper> v1Swapper { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<Advertisement>()
+                .HasIndex(p => new { p.ActiveSiteAd, p.StartSDateTime })
+                .IsUnique(); 
 
             builder.Entity<AdvertisementHistory>()
                 .HasIndex(p => new { p.AdvertisementID, p.Year, p.Month })

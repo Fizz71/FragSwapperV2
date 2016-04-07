@@ -12,8 +12,10 @@ using Microsoft.Net.Http.Headers;
 using Microsoft.AspNet.Authorization;
 using System;
 using FragSwapperV2.ViewModels.Hosts;
+using FragSwapperV2.Libraries;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
+using Microsoft.Extensions.OptionsModel;
 
 namespace FragSwapperV2.Controllers
 {
@@ -23,15 +25,18 @@ namespace FragSwapperV2.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly AppSettings _appSettings;
 
         public HostsController(
             UserManager<ApplicationUser> userManager,
             ApplicationDbContext context,
-            IHostingEnvironment hostingEnvironment)
+            IHostingEnvironment hostingEnvironment,
+            IOptions<AppSettings> appSettings)
         {
             _context = context;
             _userManager = userManager;
             _hostingEnvironment = hostingEnvironment;
+            _appSettings = appSettings.Value;
         }
 
         [AllowAnonymous]
@@ -44,7 +49,6 @@ namespace FragSwapperV2.Controllers
         // GET: Hosts/Create
         public IActionResult Create()
         {
-            ViewData["ImageGuid"] = Guid.NewGuid().ToString();
             return View();
         }
 
@@ -60,6 +64,12 @@ namespace FragSwapperV2.Controllers
                 var user = await _userManager.FindByNameAsync(User.Identity.Name);
                 var hostAdministrator = new HostAdministrator { ApplicationUser = user, Host = host };
                 _context.HostAdministrators.Add(hostAdministrator);
+                foreach (string state in model.States)
+                {
+                    var hostState = new HostStates { Host = host, State = _context.States.Single(x => x.ID == int.Parse(state.Split(':')[1])) };
+                    _context.HostStates.Add(hostState);
+
+                }
                 if (await _context.SaveChangesAsync() > 0)
                 {
                     return RedirectToAction("Index");
@@ -84,23 +94,52 @@ namespace FragSwapperV2.Controllers
             return false; // This should never happen!!!
         }
 
-        /*
         // GET: Hosts/Details/5
+        [AllowAnonymous]
         public IActionResult Details(int? id)
         {
+          
             if (id == null)
             {
                 return HttpNotFound();
             }
 
-            Host host = _context.Hosts.Single(m => m.ID == id);
-            if (host == null)
+            HostDetail hostDetail = new HostDetail();
+            hostDetail.Host = _context.Hosts.Single(m => m.ID == id);
+
+            if (hostDetail.Host == null) return HttpNotFound();
+
+            hostDetail.Events = _context.Events.Where(x => x.Host.ID == id).OrderByDescending(x => x.EventDate).ToList();
+
+            // We only care about completed events for averages.
+            var completedEvents = hostDetail.Events.Where(x => x.Status > EventStatus.Open);
+            hostDetail.CompletedEventsCount = completedEvents.Count();
+            if (hostDetail.CompletedEventsCount > 0)
             {
-                return HttpNotFound();
+                hostDetail.EventRegistrationAverage = completedEvents.Sum(x => x.Registered) / hostDetail.CompletedEventsCount;
+                hostDetail.EventAttendeeAverage = completedEvents.Sum(x => x.Attendees) / hostDetail.CompletedEventsCount;
+                hostDetail.EventListingsAverage = completedEvents.Sum(x => x.Listings) / hostDetail.CompletedEventsCount;
+                hostDetail.EventTradesAverage = completedEvents.Sum(x => x.Trades) / hostDetail.CompletedEventsCount;
+            }
+            else
+            {
+                hostDetail.EventRegistrationAverage = 0;
+                hostDetail.EventAttendeeAverage = 0;
+                hostDetail.EventListingsAverage = 0;
+                hostDetail.EventTradesAverage = 0;
             }
 
-            return View(host);
+            hostDetail.HostLogoFileName = Common.HostImageLogo((int)id, _context);
+
+            if (hostDetail.IsPremium)
+                hostDetail.RandomEventImages = Common.RandomHostImages((int)id, 10, _context);
+
+            return View(hostDetail);
         }
+
+        #region "Crap to go through"
+
+        /*
 
         // GET: Hosts/Create
         public IActionResult Create()
@@ -181,5 +220,6 @@ namespace FragSwapperV2.Controllers
             return RedirectToAction("Index");
         }
     */
+        #endregion
     }
 }

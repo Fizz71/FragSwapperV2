@@ -48,5 +48,22 @@ namespace FragSwapperV2.Libraries
                 return new GeocodingResponse();
             }
         }
+
+
+        public GeocodingResponse GetGeocoding(string Lat, string Lng)
+        {
+            if ((Lat.Trim().Length == 0) || (Lng.Trim().Length == 0)) return new GeocodingResponse();
+            try
+            {
+                var requestUri = apiURL + string.Format("geocode/json?latlng={0},{1}&key={2}", Lat, Lng, apiKey);
+                var response = new System.Net.WebClient().DownloadString(requestUri);
+                return JsonConvert.DeserializeObject<GeocodingResponse>(response);
+            }
+            catch (Exception)
+            {
+                // todo: Handle the exception.
+                return new GeocodingResponse();
+            }
+        }
     }
 }

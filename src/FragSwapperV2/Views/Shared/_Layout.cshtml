@@ -11,11 +11,13 @@
     }
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link href="~/lib/bootstrap-multiselect/bootstrap-multiselect.css" rel="stylesheet" />       
         <link href="~/lib/bootstrap-fileinput/css/fileinput.css" rel="stylesheet" />
         <link rel="stylesheet" href="~/css/site.css" />
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link href="~/lib/bootstrap-multiselect/bootstrap-multiselect.css" rel="stylesheet" />
         <link href="~/lib/bootstrap-fileinput/css/fileinput.css" rel="stylesheet" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
@@ -31,7 +33,7 @@
             </button>
         </div>
     </div>
-    <div id="fsHeader" class="navbar navbar-inverse navbar-fixed-top hidden-xs" >
+    <div id="fsHeader" class="navbar navbar-inverse navbar-fixed-top hidden-xs">
         <div class="container-fluid">
             <table style="width:100%">
                 <tr>
@@ -100,7 +102,8 @@
         </div>
     </div>
 
-    <div class="container body-content" style="padding-top:20px;" ng-controller="userNotificationsController">
+    <div class="container body-content" style="padding-top:20px;">
+        @*ng-controller="userNotificationsController"*@
         @RenderBody()
         <hr />
 
@@ -117,6 +120,16 @@
             </div>
             <p>&copy; 2016 - FragSwapperV2</p>
         </footer>
+    </div>
+
+    <div id="imgModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img src="" class="img-responsive">
+                </div>
+            </div>
+        </div>
     </div>
 
     <environment names="Development">
@@ -151,6 +164,6 @@
     </environment>
 
     @RenderSection("scripts", required: false)
-    
+
 </body>
 </html>

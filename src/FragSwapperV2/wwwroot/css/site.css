@@ -48,11 +48,21 @@ textarea {
     .adImage {
         width: 355px;
     }
+
+    .hostLogoImage {
+        max-width: 310px;
+        max-height: 200px;
+    }
 }
 
 @media(min-width:768px) {
     .adImage {
         width: 300px;
+    }
+
+    .hostLogoImage {
+        max-width: 680px;
+        max-height: 300px;
     }
 }
 
@@ -60,11 +70,21 @@ textarea {
     .adImage {
         width: 472px;
     }
+
+    .hostLogoImage {
+        max-width: 580px;
+        max-height: 300px;
+    }
 }
 
 @media(min-width:1200px) {
     .adImage {
         width: 472px;
+    }
+
+    .hostLogoImage {
+        max-width: 720px;
+        max-height: 300px;
     }
 }
 
@@ -100,8 +120,20 @@ h2 {
     margin-bottom: 0;
     margin-top: 0;
 }
+
 /* End maps play css*/
 
 
+.popover-content {
+    color: #808080 !important; /*black color*/
+}
 
 
+#carousel-host {
+    width: 100%;
+    max-width: 400px;
+    max-height: 300px;
+    margin-left:auto;
+    margin-right:auto;
+    margin-bottom:10px;
+}

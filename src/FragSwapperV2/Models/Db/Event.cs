@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace FragSwapperV2.Models.Db
@@ -85,6 +86,21 @@ namespace FragSwapperV2.Models.Db
 
         [Required]
         public bool ModuleAdminQuestions { get; set; }
+
+
+        // We only count these once an event is done (>Open) for summary purposes.
+        [Required, DefaultValue(0)]
+        public int Attendees { get; set; }
+
+        [Required, DefaultValue(0)]
+        public int Registered { get; set; }
+
+        [Required, DefaultValue(0)]
+        public int Listings { get; set; }
+
+        [Required, DefaultValue(0)]
+        public int Trades { get; set; }
+
 
     }
 }

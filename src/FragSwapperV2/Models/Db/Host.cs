@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace FragSwapperV2.Models.Db
 {
@@ -27,23 +28,25 @@ namespace FragSwapperV2.Models.Db
     {
         public int ID { get; set; }
 
-        [MaxLength(200), Required]
+        [Required, MaxLength(200)]
         public string Name { get; set; }
 
-        [MaxLength(20), MinLength(2), Required]
+        [Required, MaxLength(20), MinLength(2)]
         public string Abbreviation { get; set; }
 
-        [MaxLength(20), MinLength(2), Required]
+        [Required, MaxLength(20), MinLength(2)]
         public string ShortName { get; set; }
 
         [MaxLength(200)]
         public string URL { get; set; }
 
+        [Required, DefaultValue(HostLogoImageType.Rectangle)]
         public HostLogoImageType LogoImageType { get; set; }
 
         public string Message { get; set; }
 
         [Required]
+        [DefaultValue(HostAccountType.New)]
         public HostAccountType AccountType { get; set; }
 
         // If this isn't a premium account, they can buy premium event tickets.
@@ -52,5 +55,8 @@ namespace FragSwapperV2.Models.Db
         public int PremiumEvents { get; set; }
 
         public DateTime? PremiumAccountExpiration { get; set; }
+
+        [Required, DefaultValue(false)]
+        public bool AutoApproveStandardEvent { get; set; }
     }
 }

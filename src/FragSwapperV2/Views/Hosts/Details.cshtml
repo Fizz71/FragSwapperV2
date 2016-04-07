@@ -1,0 +1,266 @@
+﻿@using System.Collections.Generic
+@using Microsoft.AspNet.Http
+@using Microsoft.AspNet.Http.Authentication
+@using FragSwapperV2.Models.Db
+@model HostDetail
+@{int prev = 0;}
+
+<div class="row">
+    @if (Model.RandomEventImages.Count == 0)
+    {
+        <div class="col-md-2"></div>
+    }
+    <div class="col-md-8">
+        <div style="text-align:center" class="panel @(Model.IsPremium?"panel-warning":"panel-default")">
+            @if (Model.IsPremium)
+            {
+            <div class="panel-heading">Premium Host</div>
+            }
+            else if (Model.Host.AccountType == HostAccountType.Inactive)
+            {
+            <div class="panel-heading">Inactive Host</div>
+            }
+
+            <div class="panel-body">
+                <img src="@(Model.HostLogoFileName)" alt="@(Model.Host.Name)" class="hostLogoImage" />
+                <h3>@(Model.Host.Name)</h3>
+            </div>
+            @if (Model.Events.Any(x => x.Status >= EventStatus.Open))
+            {
+            @if (Model.Host.AccountType == HostAccountType.Inactive)
+                {
+            <div class="panel-footer">
+                <b>
+                    Hosted Events From
+                    <i>
+                        @((Model.FirstEvent).ToString("MMMM, yyyy"))
+                        to
+                        @((Model.LastEvent).ToString("MMMM, yyyy"))
+                    </i>
+                </b>
+            </div>
+                }
+                else
+                {
+            <div class="panel-footer">
+                <b>
+                    Hosting Events Since
+                    <i>@((Model.FirstEvent).ToString("MMMM, yyyy"))</i>
+                </b>
+            </div>
+                }
+            }
+        </div>
+    </div>
+    @if (Model.RandomEventImages.Count == 0)
+    {
+        <div class="col-md-2"></div>
+    }
+    else
+    {
+        <div class="col-md-4">
+            <div id="carousel-host" class="carousel slide" data-ride="carousel" data-interval="3000">
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                    <li data-target="#carousel-host" data-slide-to="0" class="active"></li>
+                    @for (int i = 1; i < Model.RandomEventImages.Count; i++)
+                {
+                        <li data-target="#carousel-host" data-slide-to="@(i)"></li>
+                    }
+                </ol>
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner" role="listbox">
+                    @{prev = 0;}
+                    @foreach (var oneImage in Model.RandomEventImages)
+                {
+                        <div class="item @(prev == 0 ? "active" : "")">
+                            <img data-toggle="modal" data-target="#imgModal" class="carousel-host-image" src="@oneImage.FileName" alt="@oneImage.Caption">
+                            <div class="carousel-caption">
+                                <p style="color:white;font-size:small">@oneImage.Caption</p>
+                            </div>
+                        </div>
+                        prev = 1;
+                    }
+                </div>
+                <!-- Controls -->
+                <a class="left carousel-control" href="#carousel-host" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#carousel-host" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+                        }
+</div>
+
+
+
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h4 class="panel-title">Host Statistics</h4>
+    </div>
+    <div class="panel-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-1 hidden-xs hidden-sm">&nbsp;</div>
+                <div class="col-md-4 col-sm-6">
+                    <a tabindex="0" aria-hidden="true" class="glyphicon glyphicon-info-sign" role="button" data-toggle="popover" data-trigger="focus"
+                       title="Completed Events"
+                       data-content="Test"></a>
+                    <b>Total # Completed Events:</b> @Model.CompletedEventsCount
+                </div>
+                <div class="col-md-2 hidden-xs hidden-sm">&nbsp;</div>
+                <div class="col-md-4 col-sm-6">
+                    <a tabindex="0" aria-hidden="true" class="glyphicon glyphicon-info-sign" role="button" data-toggle="popover" data-trigger="focus"
+                       title="Listings per Event"
+                       data-content=""></a>
+                    <b>Average # Listings per Event:</b> @Model.EventListingsAverage
+                </div>
+                <div class="col-md-1 hidden-xs hidden-sm">&nbsp;</div>
+            </div>
+            <div class="row">
+                <div class="col-md-1 hidden-xs hidden-sm">&nbsp;</div>
+                <div class="col-md-4 col-sm-6">
+                    <a tabindex="0" aria-hidden="true" class="glyphicon glyphicon-info-sign" role="button" data-toggle="popover" data-trigger="focus"
+                       title="Events per Year"
+                       data-content=""></a>
+                    <b>Average # Events per Year:</b> @Model.WeightedEventAverage
+                </div>
+                <div class="col-md-2 hidden-xs hidden-sm">&nbsp;</div>
+                <div class="col-md-4 col-sm-6">
+                    <a tabindex="0" aria-hidden="true" class="glyphicon glyphicon-info-sign" role="button" data-toggle="popover" data-trigger="focus"
+                       title="Trades per Event"
+                       data-content=""></a>
+                    <b>Average # Trades per Event:</b> @Model.EventTradesAverage
+                </div>
+                <div class="col-md-1 hidden-xs hidden-sm">&nbsp;</div>
+            </div>
+            <div class="row">
+                <div class="col-md-1 hidden-xs hidden-sm">&nbsp;</div>
+                <div class="col-md-4 col-sm-6">
+                    <a tabindex="0" aria-hidden="true" class="glyphicon glyphicon-info-sign" role="button" data-toggle="popover" data-trigger="focus"
+                       title="Registered Attendees per Event"
+                       data-content=""></a>
+                    <b>Average # Attendees per Event:</b> @Model.EventAttendeeAverage
+                </div>
+                <div class="col-md-2 hidden-xs hidden-sm">&nbsp;</div>
+                <div class="col-md-4 col-sm-6">
+                    <a tabindex="0" aria-hidden="true" class="glyphicon glyphicon-info-sign" role="button" data-toggle="popover" data-trigger="focus"
+                       title="Registered FS Users per Event"
+                       data-content=""></a>
+                    <b>Average # Users per Event:</b> @Model.EventRegistrationAverage
+                </div>
+                <div class="col-md-1 hidden-xs hidden-sm">&nbsp;</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.Events.Count(x => x.Status == EventStatus.EventDay) > 0)
+{
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Today's Event!</h3>
+        </div>
+        <div class="panel-body">
+            <ul>
+                @foreach (var eachEvent in Model.Events.Where(x => x.Status == EventStatus.EventDay))
+                {
+                    <li>@eachEvent.Name</li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@if (Model.Events.Count(x => x.Status == EventStatus.Open) > 0)
+{
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Upcoming Event</h3>
+        </div>
+        <div class="panel-body">
+            <ul>
+                @foreach (var eachEvent in Model.Events.Where(x => x.Status == EventStatus.Open))
+                {
+                    <li>@eachEvent.Name</li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+
+@if (Model.Events.Count(x => x.Status == EventStatus.Preview) > 0)
+{
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Future Events</h3>
+        </div>
+        <div class="panel-body">
+            <ul>
+                @foreach (var oneEvent in Model.Events.Where(x => x.Status == EventStatus.Preview))
+                {
+                    <li>@oneEvent.Name</li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@if (Model.Events.Count(x => x.Status == EventStatus.PostEvent) > 0)
+{
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Events in Post</h3>
+        </div>
+        <div class="panel-body">
+            <ul>
+                @foreach (var oneEvent in Model.Events.Where(x => x.Status == EventStatus.PostEvent))
+                {
+                    <li>@oneEvent.Name</li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@if (Model.Events.Count(x => x.Status == EventStatus.Archived) > 0)
+{
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <a tabindex="0" aria-hidden="true" class="glyphicon glyphicon-info-sign" role="button" data-toggle="popover" data-trigger="focus"
+                   title="Archived Events"
+                   data-content="These events are avaiable for you visit at any time but do not allow any changes."></a>&nbsp;&nbsp;
+                Archived Events
+            </h3>
+        </div>
+        <div class="panel-body">
+            @{prev = 0;}
+            @foreach (var thisEvent in Model.Events.Where(x => x.Status == EventStatus.Archived))
+                {
+                <hr style="margin-top: 4px; margin-bottom: 4px;" />
+                <div class="row">
+                    <div class="col-md-1" style="text-align:center;">
+                        @if (thisEvent.EventDate.Year != prev)
+                        {
+                            prev = thisEvent.EventDate.Year;
+                            <h3 class="text-danger" style="margin-top:0; margin-bottom:0;">@prev</h3>
+                        }
+                    </div>
+                    <div class="col-md-10" style="padding-top:5px; text-align:center;">
+                        <a href="/Events/@thisEvent.ID">@thisEvent.Name</a><br />
+                        @thisEvent.EventDate.ToString("MMMM d, yyyy")
+                    </div>
+                    <div class="col-md-1 hidden-sm hidden-xs" style="text-align:center;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+                }

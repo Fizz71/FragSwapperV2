@@ -16,6 +16,8 @@ namespace FragSwapperV2.Models.Db
 
         public string Notes { get; set; }
 
+        public Host Host { get; set; }
+
         public Event Event { get; set; }
 
         [Required]
@@ -25,11 +27,12 @@ namespace FragSwapperV2.Models.Db
         public DateTime EndSDateTime { get; set; }
 
         [Required]
-        public string ImageURL { get; set; }
+        public Image Image { get; set; }
 
         [Required]
         public string DestinationURL { get; set; }
 
-
+        [Required]
+        public bool ActiveSiteAd { get; set; }
     }
 }
